@@ -1,0 +1,28 @@
+# Ejemplo: llm-aegis delante de un Ollama.
+# Los clientes (LibreChat, n8n, scripts...) apuntan a http://<host>:8080 en vez de a Ollama.
+services:
+  aegis:
+    build: .
+    image: llm-aegis:local
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      AEGIS_UPSTREAM: "http://ollama:11434"
+      # Claves de los clientes, separadas por comas (mejor en un fichero .env).
+      AEGIS_API_KEYS: "${AEGIS_API_KEYS:?define AEGIS_API_KEYS en .env}"
+    volumes:
+      - ./aegis.yaml:/etc/aegis/aegis.yaml:ro
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    # Sin "ports": Ollama solo es accesible a través de aegis.
+
+volumes:
+  ollama:

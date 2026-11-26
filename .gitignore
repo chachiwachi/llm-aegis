@@ -1,0 +1,13 @@
+# Compilados
+/bin/
+engine/target/
+internal/engine/aegis_engine.wasm
+
+# Configuración local (puede llevar hashes y rutas propias)
+/aegis.yaml
+.env
+
+# Editores
+.vscode/
+.idea/
+*.swp

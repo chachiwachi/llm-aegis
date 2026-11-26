@@ -1,0 +1,6 @@
+bin/
+engine/target/
+internal/engine/aegis_engine.wasm
+.git/
+.env
+aegis.yaml

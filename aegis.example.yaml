@@ -1,0 +1,38 @@
+# Configuración de ejemplo de llm-aegis. Cópiala a aegis.yaml y ajústala.
+
+listen: ":8080"
+
+# Proveedor al que se reenvían las peticiones: Ollama o una API compatible con OpenAI.
+upstream: "http://127.0.0.1:11434"
+# upstream: "https://api.openai.com"
+# Variable de entorno con la API key del proveedor (opcional; se envía como Bearer).
+# upstream_api_key_env: "UPSTREAM_API_KEY"
+
+# Hashes SHA-256 de las API keys de los clientes. Genera uno con:
+#   aegis hash-key "mi-clave-larga-y-aleatoria"
+# También se pueden pasar en claro con la variable AEGIS_API_KEYS (separadas por comas).
+api_keys_sha256: []
+# Solo para pruebas en local: acepta peticiones sin API key.
+allow_anonymous: false
+
+rate_limit:
+  requests_per_minute: 60   # por cliente; 0 lo desactiva
+  burst: 10
+
+# Política para lo que envía el usuario (y los resultados de herramientas).
+input:
+  block_risk: 0.85            # bloquea si el riesgo de ataque es >= 0.85 (0 = nunca)
+  block_categories: []        # p. ej. [secret] para rechazar prompts con credenciales
+  redact: [pii, secret]       # tapa estos datos antes de que lleguen al modelo
+
+# Política para lo que responde el modelo.
+output:
+  block_risk: 0
+  block_categories: []
+  redact: [secret]
+
+max_body_bytes: 1048576       # 1 MiB
+engine_pool_size: 4           # instancias WASM en paralelo
+
+audit:
+  include_text: false         # true guarda los textos en el log (contendrá datos sensibles)
