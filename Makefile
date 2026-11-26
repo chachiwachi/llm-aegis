@@ -21,7 +21,8 @@ test-engine:
 test-go: engine
 	go test -race ./...
 
-lint:
+# go vet necesita el WASM: internal/engine lo incrusta con go:embed.
+lint: engine
 	cd engine && cargo fmt --check && cargo clippy --all-targets -- -D warnings
 	go vet ./...
 
